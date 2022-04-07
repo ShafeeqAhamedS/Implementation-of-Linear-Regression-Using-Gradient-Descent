@@ -21,48 +21,70 @@ To write a program to implement the linear regression using gradient descent.
 /*
 Program to implement the linear regression using gradient descent.
 Developed by: Shafeeq Ahamed.S
-RegisterNumber: 212221230092 
+RegisterNumber: 212221230092
 */
-
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LinearRegression
 df=pd.read_csv('student_scores - student_scores.csv')
-print(df.head())
-print(df.tail())
+df.head()
+df.tail()
 
-x=df.iloc[:,:-1].values
-y=df.iloc[:,1].values
-from sklearn.model_selection import train_test_split
-x_train,x_test,y_train,y_test = train_test_split(x,y,test_size = 1/3,random_state=0)
-regressor = LinearRegression()
-regressor.fit(x_train,y_train)
-y_pred=regressor.predict(x_test)
+#checking for null values in dataset
+df.isnull().sum()
 
-#for training data
-plt.scatter(x_train,y_train,color = "black")
-plt.plot(x_train,regressor.predict(x_train),color= "lightblue")
-plt.title("hours Vs scores(train)")
-plt.xlabel("hours")
-plt.ylabel("scores")
+#To calculate Gradient decent and Linear Descent
+x=df.Hours
+x.head()
+
+y=df.Scores
+y.head()
+
+n=len(x)
+m=0
+c=0
+L=0.001
+loss=[]
+for i in range(10000):
+    ypred = m*x + c
+    MSE = (1/n) * sum((ypred - y)*2)
+    dm = (2/n) * sum(x*(ypred-y))
+    dc = (2/n) * sum(ypred-y)
+    c = c-L*dc
+    m = m-L*dm
+    loss.append(MSE)
+print(m,c)
+
+#plotting Linear Regression graph
+print("Slope = {}\nConstant = {}".format(m,c))
+y_pred=m*x+c
+plt.scatter(x,y,color="magenta")
+plt.plot(x,y_pred,color="red")
+plt.xlabel("Study Hours")
+plt.ylabel("Scores")
+plt.title("Study hours vs Scores")
 plt.show()
 
-#for test data
-plt.scatter(x_test,y_test,color='#FF6766')
-##FF6766 is light red Color
-plt.plot(x_test,regressor.predict(x_test),color='#D099E2')
-##D099E2 is Lavendar Color
-plt.title("hours Vs scores(test)")
-plt.xlabel("hours")
-plt.ylabel("scores")
+#plotting Gradient Descent graph
+plt.plot(loss, color="darkblue")
+plt.xlabel("Iterations")
+plt.ylabel("Loss")
 plt.show()
 ```
-
 ## Output:
-![LR using gradient descent](out1.png)
-![LR graph training data](graphtrain.png)
-![LR graph test data](graphtest.png)
+### Contents in the data file (head, tail):
+![out1](out1.png)
+![out2](out2.png)
+### Checking for null values in the dataset:
+![out3](out3.png)
+### X and Y datasets from original dataset:
+![out4](out4.png)
+![out5](out5.png)
+### Linear Regression Graph:
+![Graph1](graph1.png)
+### Gradient Descent Graph:
+![Graph2](graph2.png)
 
 ## Result:
 Thus the program to implement the linear regression using gradient descent is written and verified using python programming.
